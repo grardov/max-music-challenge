@@ -24,9 +24,9 @@ export default function Artist() {
         }}
       />
       <h3>Related artist:</h3>
-      {relatedArtist.map((artist, key) => (
+      {relatedArtist.map((artist) => (
         <ArtistCard
-          key={key}
+          key={artist.id}
           artist={artist}
           save={isInTheList(artist.id)}
           onClick={(artist, action) => {
