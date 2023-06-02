@@ -12,7 +12,7 @@ export default function Home() {
   const [search, setSearch] = useState<string>("");
   const [results, setResults] = useState<AppConfig.Artist[]>([]);
   const { addToList, removeFromList, isInTheList } = useList();
-  const { genres, searchGenre, clearGenres } = useGenre(search);
+  const { genres, searchGenre, clearGenres, loading, error } = useGenre(search);
 
   const handleClick = async (genre: AppConfig.Genre) => {
     setSearch(genre.name);
@@ -33,15 +33,19 @@ export default function Home() {
 
   return (
     <div className="w-full">
-      <label className="relative w-96" htmlFor="search">
-        Enter a genre to find artist:
-        <input
-          className="w-full mt-1"
-          value={search}
-          type="text"
-          placeholder="Rock, Alternative, Blues, etc."
-          onChange={handleChange}
-        />
+      <div className="relative w-96">
+        <label className="w-full">
+          Enter a genre to find artist:{" "}
+          {loading && <span className="text-sm italic">Searching...</span>}
+          <input
+            className="w-full mt-1"
+            value={search}
+            type="text"
+            placeholder="Rock, Alternative, Blues, etc."
+            onChange={handleChange}
+          />
+        </label>
+        {error && <p className="text-red-600">{error}</p>}
         {search && genres.length > 0 && (
           <ul className="absolute top-16 left-0 bg-white w-full flex flex-col gap-1 shadow-lg rounded list-none pl-0 max-h-96 overflow-hidden overflow-y-scroll cursor-pointer">
             {genres.map((genre) => (
@@ -55,7 +59,7 @@ export default function Home() {
             ))}
           </ul>
         )}
-      </label>
+      </div>
       <div className="mt-8 w-full flex flex-col gap-3">
         {results.map((result, key) => (
           <ArtistCard
